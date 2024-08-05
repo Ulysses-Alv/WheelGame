@@ -4,7 +4,7 @@ using Unity.Netcode;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-public class GameManager : NetworkBehaviour
+public partial class GameManager : NetworkBehaviour
 {
     [SerializeField] private NetworkObject carPrefab;
 
@@ -18,29 +18,31 @@ public class GameManager : NetworkBehaviour
     [SerializeField] NetworkObject[] wheelPrefabs;
     private List<NetworkObject> wheelInstances = new();
 
-    private void Start()
+    public static GameManager instance;
+
+    private void Awake()
     {
-        NetworkManager.Singleton.OnServerStarted += SpawnCar;
-        NetworkManager.Singleton.OnClientConnectedCallback += OnNewClientConnect;
-        NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnect;
+        if (instance == null)
+        {
+            instance = this;
+        }
+        else if (instance != null && instance != this)
+        {
+            Destroy(this);
+        }
+
     }
 
-    private void OnClientDisconnect(ulong clientID)
+    public void StartGame()
     {
-        //
-    }
+        if (!NetworkManager.Singleton.IsServer) Destroy(this);
+        if (!GameStatusManager.GetCurrentStatus().Equals(GameStatus.STARTING)) return;
 
-    private void OnNewClientConnect(ulong clientId)
-    {
-        if (!IsServer) return;
-        NetworkObject wheelInstance = GetRandomWheel();
-        wheelInstance.ChangeOwnership(clientId);
-        OnNewConnectedClientRpc();
+        StartCoroutine(SpawnCar());
     }
-
-    private void SpawnCar()
+    private IEnumerator SpawnCar()
     {
-        if (!NetworkManager.Singleton.IsHost) return;
+        yield return DictionaryOfWaitForSeconds.GetWaitForSeconds(10);
 
         var carInstance = Instantiate(carPrefab.gameObject);
         carInstanceNet = carInstance.GetComponent<NetworkObject>();
@@ -85,11 +87,6 @@ public class GameManager : NetworkBehaviour
         return result;
     }
 
-    [ClientRpc]
-    private void OnNewConnectedClientRpc()
-    {
-        UpdateClientWheelsParent();
-    }
 
     private NetworkObject GetRandomWheel()
     {
@@ -112,4 +109,36 @@ public class GameManager : NetworkBehaviour
 
         wheelInstance.GetComponent<WheelControl>().SetParentAndEnableClientRpc(carNetworkObjectId);
     }
+}
+public partial class GameManager
+{
+
+}
+
+public static class GameStatusManager
+{
+    private static GameStatus CurrentStatus;
+
+    public static GameStatus GetCurrentStatus()
+    {
+        if (!NetworkManager.Singleton.IsServer) return GameStatus.NOT_SERVER;
+
+        return CurrentStatus;
+    }
+    public static void SetCurrentStatus(GameStatus status)
+    {
+        if (!NetworkManager.Singleton.IsServer) return;
+
+        CurrentStatus = status;
+    }
+}
+
+public enum GameStatus
+{
+    NOT_SERVER = -1, //-1
+    STARTING,   //0
+    PLAYING,    //1
+    PAUSED,     //2
+    ENDED,      //3
+    ON_LOBBY    //4
 }

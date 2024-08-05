@@ -7,12 +7,18 @@ public class LobbyManagerUI : MonoBehaviour
 {
     [SerializeField] private GameObject LobbyMenu;
 
-    [SerializeField] private PlayerListUiManager playerListUiManager;
-    [SerializeField] private Button inviteFriend, startGame;
+    [SerializeField] private Button inviteFriend, startGame, configuration;
+
     private void Start()
     {
+        configuration.onClick.AddListener(OpenConfigurationMenu);
         inviteFriend.onClick.AddListener(OpenSteamFriendsOverlay);
         startGame.onClick.AddListener(StartGame);
+    }
+
+    private void OpenConfigurationMenu()
+    {
+        throw new NotImplementedException();
     }
 
     public void SetPlayersLobbyInfo(CSteamID lobbyID)
@@ -21,8 +27,6 @@ public class LobbyManagerUI : MonoBehaviour
         string listOfPlayers = GetListOfPlayers(playerCount, lobbyID);
         int maxPlayers = SteamMatchmaking.GetLobbyMemberLimit(lobbyID);
 
-        playerListUiManager.UpdatePlayerCount(playerCount, maxPlayers);
-        playerListUiManager.UpdateListPlayer(listOfPlayers);
     }
 
     public void OpenLobbyUI(bool isOwner)
@@ -32,6 +36,7 @@ public class LobbyManagerUI : MonoBehaviour
         startGame.gameObject.SetActive(isOwner);
         inviteFriend.gameObject.SetActive(isOwner);
     }
+
     private void OpenSteamFriendsOverlay()
     {
         if (!SteamManager.Initialized)
@@ -39,12 +44,13 @@ public class LobbyManagerUI : MonoBehaviour
             Debug.LogError("Steam is not initialized.");
             return;
         }
-
-        SteamFriends.ActivateGameOverlayInviteDialog(LobbyManager.instance.lobbyID);
+        Debug.Log("Opening Overlay");
+        SteamFriends.ActivateGameOverlayInviteDialog(LobbyManager.instance.LobbyID);
     }
+
     private void StartGame()
     {
-        throw new NotImplementedException();
+        Debug.Log("TODAVIA NO SE INICIA");
     }
 
     private string GetListOfPlayers(int memberCount, CSteamID lobbyID)
