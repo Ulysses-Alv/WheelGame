@@ -31,4 +31,8 @@ public class TeamLobby : MonoBehaviour, IDropHandler
             clients.Remove(playerClient);
         }
     }
+    public List<PlayerClient> GetPlayerClients()
+    {
+        return clients;
+    }
 }

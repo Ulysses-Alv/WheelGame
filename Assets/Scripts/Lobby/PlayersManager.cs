@@ -1,11 +1,14 @@
 ﻿using Steamworks;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
 
 public static class PlayersManager
 {
-    public readonly static List<PlayerClient> players = new();
+    public readonly static List<PlayerClient> playersInGame = new();
     private static PlayerClient incompleteClient = null;
+    public static readonly UnityEvent<PlayerClient> onClientAdded = new();
+    public static readonly UnityEvent<PlayerClient> onClientRemoved = new();
 
     public static void AddName(string playerName)
     {
@@ -37,10 +40,18 @@ public static class PlayersManager
     {
         if (incompleteClient.IsComplete())
         {
-            players.Add(incompleteClient);
-            PlayerDraggablesManager.Instance.CreateNewPlayer(incompleteClient);
+            playersInGame.Add(incompleteClient);
+            onClientAdded.Invoke(incompleteClient);
             incompleteClient = null;
         }
+    }
+
+    public static void RemoverPlayerWithSteamID(CSteamID steamID)
+    {
+        PlayerClient playerToRemove = playersInGame.Find(client => client.steamID == steamID);
+
+        playersInGame.Remove(playerToRemove);
+        onClientRemoved.Invoke(playerToRemove);
     }
 }
 

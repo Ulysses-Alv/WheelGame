@@ -23,7 +23,7 @@ public class TeamLobbyManager : MonoBehaviour
     {
         if (!NetworkManager.Singleton.IsServer) return;
 
-        List<PlayerClient> playersList = PlayersManager.players;
+        List<PlayerClient> playersList = PlayersManager.playersInGame;
 
         Shuffle(playersList);
 
@@ -75,5 +75,27 @@ public class TeamLobbyManager : MonoBehaviour
             SecondTeamLobby.AddPlayer(clientId);
             return SecondTeamLobby;
         }
+    }
+
+    public InGamePlayers GetIngamePlayers()
+    {
+        var firstTeam = FirstTeamLobby.GetPlayerClients();
+        var secondTeam = SecondTeamLobby.GetPlayerClients();
+
+        InGamePlayers result = new(firstTeam, secondTeam);
+
+        return result;
+    }
+}
+
+public struct InGamePlayers
+{
+    public List<PlayerClient> teamA;
+    public List<PlayerClient> teamB;
+
+    public InGamePlayers(List<PlayerClient> teamA, List<PlayerClient> teamB)
+    {
+        this.teamA = teamA;
+        this.teamB = teamB;
     }
 }

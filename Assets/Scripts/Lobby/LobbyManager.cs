@@ -16,7 +16,6 @@ public class LobbyManager : MonoBehaviour
     private Callback<LobbyEnter_t> m_LobbyEntered;
     private Callback<LobbyChatUpdate_t> m_LobbyChatUpdate;
     private Callback<GameLobbyJoinRequested_t> m_GameLobbyRequestJoin;
-
     [SerializeField] private SteamNetworkingSocketsTransport steamNetworkingSocketsTransport;
 
     private List<string> playerNames;
@@ -140,21 +139,31 @@ public class LobbyManager : MonoBehaviour
 
     private void OnLobbyChatUpdate(LobbyChatUpdate_t result)
     {
-        if (!IsLobbyOwner())
-        {
-            Debug.Log("NOT OWNER" + "CHAT");
-
-            return;
-        }
+        if (!IsLobbyOwner()) return;
 
         CSteamID steamID = (CSteamID)result.m_ulSteamIDUserChanged;
 
-        var palyerName = SteamFriends.GetFriendPersonaName(steamID);
+        var playerName = SteamFriends.GetFriendPersonaName(steamID);
 
-        PlayersManager.AddSteamID(steamID);
-        PlayersManager.AddName(palyerName);
-        Debug.Log("LOBBY UPDATE");
-        lobbyManagerUI.SetPlayersLobbyInfo(LobbyID);
+
+        switch (result.m_rgfChatMemberStateChange)
+        {
+            case (uint)EChatMemberStateChange.k_EChatMemberStateChangeEntered:
+                PlayersManager.AddSteamID(steamID);
+                PlayersManager.AddName(playerName);
+
+                Debug.Log("LOBBY UPDATE");
+
+                lobbyManagerUI.SetPlayersLobbyInfo(LobbyID);
+                break;
+
+            default:
+                Debug.Log("");
+                PlayersManager.RemoverPlayerWithSteamID(steamID);
+                break;
+        }
+
+
     }
 
     private void AddClientId(ulong clientId)
