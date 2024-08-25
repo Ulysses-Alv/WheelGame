@@ -1,9 +1,24 @@
 ﻿using Unity.Netcode;
+using UnityEditor;
+using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : NetworkBehaviour
 {
-
+    private string m_SceneName;
     public static GameManager instance;
+
+#if UNITY_EDITOR
+    [SerializeField] SceneAsset gameScene;
+
+    private void OnValidate()
+    {
+        if (gameScene != null)
+        {
+            m_SceneName = gameScene.name;
+        }
+    }
+#endif
 
     private void Awake()
     {
@@ -23,14 +38,26 @@ public class GameManager : NetworkBehaviour
         }
     }
 
+
     public void StartGame()
     {
         if (!NetworkManager.Singleton.IsServer) Destroy(this);
         if (!GameStatusManager.GetCurrentStatus().Equals(GameStatus.STARTING)) return;
 
-        InGamePlayers inGamePlayers = TeamLobbyManager.instance.GetIngamePlayers();
+        GameStatusManager.StartGame();
 
-        SpawnCarManager.instance.SpawnCars(inGamePlayers);
+        InGamePlayers inGamePlayers = TeamLobbyManager.instance.GetIngamePlayers();
+        NetworkManager.SceneManager.LoadScene("", LoadSceneMode.Single);
+
+        var status = NetworkManager.SceneManager.LoadScene(m_SceneName, LoadSceneMode.Additive);
+
+        if (status != SceneEventProgressStatus.Started)
+        {
+            Debug.LogWarning($"Failed to load {m_SceneName} " +
+                  $"with a {nameof(SceneEventProgressStatus)}: {status}");
+        }
+
+        // SpawnCarManager.instance.SpawnCars(inGamePlayers);
     }
     public void PauseGame()
     {
@@ -58,14 +85,19 @@ public static class GameStatusManager
 
         CurrentStatus = status;
     }
+
+    public static void StartGame()
+    {
+        SetCurrentStatus(GameStatus.STARTING);
+    }
 }
 
 public enum GameStatus
 {
     NOT_SERVER = -1, //-1
-    STARTING,   //0
-    PLAYING,    //1
-    PAUSED,     //2
-    ENDED,      //3
-    ON_LOBBY    //4
+    ON_LOBBY,    //0
+    STARTING,   //1
+    PLAYING,    //2
+    PAUSED,     //3
+    ENDED       //4
 }

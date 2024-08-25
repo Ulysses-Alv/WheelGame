@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections;
+﻿using System.Collections;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using Random = UnityEngine.Random;
+
 
 public class SpawnCarManager : MonoBehaviour
 {
@@ -16,7 +17,8 @@ public class SpawnCarManager : MonoBehaviour
     public NetworkObject rearRightWheelPrefab;
 
     private NetworkObject carInstanceNet;
-
+    [SerializeField] private Transform carPositionOne, carPositionTwo;
+    Queue<Transform> carQueue = new();
     [SerializeField] NetworkObject[] wheelPrefabs;
     private List<NetworkObject> wheelInstances = new();
 
@@ -28,6 +30,9 @@ public class SpawnCarManager : MonoBehaviour
     private void Awake()
     {
         instance = this;
+
+        carQueue.Enqueue(carPositionOne);
+        carQueue.Enqueue(carPositionTwo);
     }
 
     private IEnumerator SpawnCar()
@@ -37,6 +42,9 @@ public class SpawnCarManager : MonoBehaviour
         var carInstance = Instantiate(carPrefab.gameObject);
         carInstanceNet = carInstance.GetComponent<NetworkObject>();
         carInstanceNet.Spawn(true);
+
+        var carPos = carQueue.Dequeue();
+        carInstance.transform.SetPositionAndRotation(carPos.position, carPos.rotation);
 
         AssignOwnership();
     }
