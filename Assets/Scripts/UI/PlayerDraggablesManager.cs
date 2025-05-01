@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Unity.Netcode;
 using UnityEngine;
 
 public class PlayerDraggablesManager : MonoBehaviour
@@ -25,6 +26,7 @@ public class PlayerDraggablesManager : MonoBehaviour
         Debug.Log("CREATED");
 
         var instance = Instantiate(PlayerDraggablePrefab).GetComponent<PlayerDraggable>();
+        instance.GetComponent<NetworkObject>().Spawn(true);
         instancesDraggables.Add(instance);
 
         instance.Initialize(newPlayer, initialTeam);

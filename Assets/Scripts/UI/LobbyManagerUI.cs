@@ -50,7 +50,7 @@ public class LobbyManagerUI : MonoBehaviour
 
     private void StartGame()
     {
-        Debug.Log("TODAVIA NO SE INICIA");
+        GameManager.instance.StartGame();
     }
 
     private string GetListOfPlayers(int memberCount, CSteamID lobbyID)

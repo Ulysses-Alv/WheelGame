@@ -10,19 +10,25 @@ public class ButtonManager : MonoBehaviour
 
     void Start()
     {
-        enterFriendLobby.onClick.AddListener(() =>
+        enterFriendLobby.onClick.AddListener(
+            () =>
         {
             SteamFriends.ActivateGameOverlay("Friend");
-        });
+        }
+        );
 
-        options.onClick.AddListener(() =>
+        options.onClick.AddListener(
+            () =>
         {
             optionsPanel.SetActive(true);
-        });
+        }
+        );
 
-        quit.onClick.AddListener(() =>
+        quit.onClick.AddListener(
+            () =>
         {
             Application.Quit();
-        });
+        }
+        );
     }
 }

@@ -188,6 +188,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 102900000, guid: 99c9720ab356a0642a771bea13969a05,
         type: 3}
+    - target: {fileID: 7667021823667232373, guid: e924221fef1c70d45973038f724859cb,
+        type: 3}
+      propertyPath: gameScene
+      value: 
+      objectReference: {fileID: 102900000, guid: 99c9720ab356a0642a771bea13969a05,
+        type: 3}
     - target: {fileID: 8596918695695700872, guid: e924221fef1c70d45973038f724859cb,
         type: 3}
       propertyPath: GlobalObjectIdHash
@@ -363,13 +369,14 @@ GameObject:
   - component: {fileID: 269760521}
   - component: {fileID: 269760523}
   - component: {fileID: 269760522}
+  - component: {fileID: 269760524}
   m_Layer: 5
   m_Name: Lobby
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &269760521
 RectTransform:
   m_ObjectHideFlags: 0
@@ -429,6 +436,27 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 269760520}
   m_CullTransparentMesh: 1
+--- !u!114 &269760524
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 269760520}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 1290127150
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!1 &275578086
 GameObject:
   m_ObjectHideFlags: 0
@@ -1948,6 +1976,7 @@ GameObject:
   - component: {fileID: 903124476}
   - component: {fileID: 903124478}
   - component: {fileID: 903124477}
+  - component: {fileID: 903124479}
   m_Layer: 5
   m_Name: TeamLobby
   m_TagString: Untagged
@@ -1962,7 +1991,7 @@ RectTransform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 903124475}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -2004,6 +2033,27 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   FirstTeamLobby: {fileID: 1955224509}
   SecondTeamLobby: {fileID: 1482899345}
+--- !u!114 &903124479
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 903124475}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 4239195395
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!1 &914394309
 GameObject:
   m_ObjectHideFlags: 0
@@ -2222,31 +2272,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 976819143}
   m_OnClick:
     m_PersistentCalls:
-      m_Calls:
-      - m_Target: {fileID: 759591730}
-        m_TargetAssemblyTypeName: LobbyManager, Assembly-CSharp
-        m_MethodName: CreateLobby
-        m_Mode: 1
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
-      - m_Target: {fileID: 269760520}
-        m_TargetAssemblyTypeName: UnityEngine.GameObject, UnityEngine
-        m_MethodName: SetActive
-        m_Mode: 6
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 1
-        m_CallState: 2
+      m_Calls: []
 --- !u!114 &976819143
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2297,6 +2323,7 @@ GameObject:
   - component: {fileID: 999598380}
   - component: {fileID: 999598379}
   - component: {fileID: 999598378}
+  - component: {fileID: 999598382}
   m_Layer: 5
   m_Name: Canvas Menu
   m_TagString: Untagged
@@ -2394,6 +2421,27 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &999598382
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 999598377}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 3166315359
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  AlwaysReplicateAsRoot: 1
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!1 &1058057592
 GameObject:
   m_ObjectHideFlags: 0
@@ -2404,6 +2452,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1058057593}
   - component: {fileID: 1058057594}
+  - component: {fileID: 1058057595}
   m_Layer: 5
   m_Name: Container
   m_TagString: Untagged
@@ -2454,6 +2503,27 @@ MonoBehaviour:
   m_Spacing: {x: 0, y: 0}
   m_Constraint: 1
   m_ConstraintCount: 1
+--- !u!114 &1058057595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1058057592}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 3513187114
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!1 &1320500379
 GameObject:
   m_ObjectHideFlags: 0
@@ -3406,6 +3476,7 @@ GameObject:
   - component: {fileID: 1482899344}
   - component: {fileID: 1482899343}
   - component: {fileID: 1482899345}
+  - component: {fileID: 1482899346}
   m_Layer: 5
   m_Name: Team B
   m_TagString: Untagged
@@ -3488,6 +3559,27 @@ MonoBehaviour:
   OnDropEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1482899346
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1482899340}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 3092134062
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!1 &1503589818
 GameObject:
   m_ObjectHideFlags: 0
@@ -3634,6 +3726,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1509350336}
   - component: {fileID: 1509350337}
+  - component: {fileID: 1509350338}
   m_Layer: 5
   m_Name: Container
   m_TagString: Untagged
@@ -3684,6 +3777,27 @@ MonoBehaviour:
   m_Spacing: {x: 0, y: 0}
   m_Constraint: 1
   m_ConstraintCount: 1
+--- !u!114 &1509350338
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1509350335}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 3299604960
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!1 &1528998051
 GameObject:
   m_ObjectHideFlags: 0
@@ -4467,6 +4581,7 @@ GameObject:
   - component: {fileID: 1955224508}
   - component: {fileID: 1955224507}
   - component: {fileID: 1955224509}
+  - component: {fileID: 1955224510}
   m_Layer: 5
   m_Name: Team A
   m_TagString: Untagged
@@ -4549,6 +4664,27 @@ MonoBehaviour:
   OnDropEvent:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &1955224510
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1955224505}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d5a57f767e5e46a458fc5d3c628d0cbb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  GlobalObjectIdHash: 4061351926
+  InScenePlacedSourceGlobalObjectIdHash: 0
+  AlwaysReplicateAsRoot: 0
+  SynchronizeTransform: 1
+  ActiveSceneSynchronization: 0
+  SceneMigrationSynchronization: 1
+  SpawnWithObservers: 1
+  DontDestroyWithOwner: 0
+  AutoObjectParentSync: 1
 --- !u!1 &1956429658
 GameObject:
   m_ObjectHideFlags: 0

@@ -15,6 +15,7 @@ public class PlayerDraggable : MonoBehaviour, IDragHandler, IBeginDragHandler, I
         playerText.text = playerClient.name;
         currentTeam = initialTeam;
         SetParent();
+
     }
 
     public void OnBeginDrag(PointerEventData eventData)

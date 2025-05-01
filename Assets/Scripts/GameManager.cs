@@ -41,23 +41,34 @@ public class GameManager : NetworkBehaviour
 
     public void StartGame()
     {
-        if (!NetworkManager.Singleton.IsServer) Destroy(this);
-        if (!GameStatusManager.GetCurrentStatus().Equals(GameStatus.STARTING)) return;
+        if (!NetworkManager.Singleton.IsServer ||
+             !GameStatusManager.GetCurrentStatus().Equals(GameStatus.ON_LOBBY)) return;
 
         GameStatusManager.StartGame();
 
         InGamePlayers inGamePlayers = TeamLobbyManager.instance.GetIngamePlayers();
-        NetworkManager.SceneManager.LoadScene("", LoadSceneMode.Single);
 
-        var status = NetworkManager.SceneManager.LoadScene(m_SceneName, LoadSceneMode.Additive);
+        NetworkManager.Singleton.SceneManager.OnLoadComplete += OnSceneLoaded;
+
+        var status = NetworkManager.Singleton.SceneManager.LoadScene(m_SceneName, LoadSceneMode.Single);
 
         if (status != SceneEventProgressStatus.Started)
         {
             Debug.LogWarning($"Failed to load {m_SceneName} " +
                   $"with a {nameof(SceneEventProgressStatus)}: {status}");
-        }
 
-        // SpawnCarManager.instance.SpawnCars(inGamePlayers);
+            NetworkManager.Singleton.SceneManager.OnLoadComplete -= OnSceneLoaded;
+        }
+    }
+
+    private void OnSceneLoaded(ulong clientId, string sceneName, LoadSceneMode loadSceneMode)
+    {
+        if (!NetworkManager.Singleton.IsServer) return;
+
+        NetworkManager.Singleton.SceneManager.OnLoadComplete -= OnSceneLoaded;
+
+        InGamePlayers inGamePlayers = TeamLobbyManager.instance.GetIngamePlayers();
+        SpawnCarManager.instance.SpawnCars(inGamePlayers);
     }
     public void PauseGame()
     {

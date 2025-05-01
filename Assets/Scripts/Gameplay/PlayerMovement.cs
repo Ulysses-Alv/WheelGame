@@ -9,8 +9,6 @@ namespace Player.Movement
 {
     public class PlayerMovement : NetworkBehaviour
     {
-        public float speed = 5f;
-        public float springCompressionFactor = 1120000f; // Factor para incrementar la compresión del resorte
 
         private PlayerInputAction inputActions;
         private Vector2 moveInput;
@@ -18,6 +16,7 @@ namespace Player.Movement
         [SerializeField] private WheelControl wheel;
 
         private bool isSpringCompressed;
+        ulong owner = 100;
 
         public override void OnNetworkSpawn()
         {
@@ -60,6 +59,7 @@ namespace Player.Movement
 
         private bool IsAcelerating()
         {
+
             return moveInput.y != 0 && Mathf.Sign(moveInput.y).Equals(Mathf.Sign(wheel.carControl.forwardSpeed));
         }
 
@@ -67,7 +67,8 @@ namespace Player.Movement
         {
             // If the user is trying to go in the opposite direction
             // apply brakes to all wheelsInstances
-            wheel.WheelCollider.brakeTorque = Mathf.Abs(moveInput.y) * wheel.carControl._brakeTorque;
+            wheel.WheelCollider.brakeTorque =
+                Mathf.Abs(moveInput.y) * wheel.carControl._brakeTorque;
             wheel.WheelCollider.motorTorque = 0;
         }
 
@@ -79,7 +80,6 @@ namespace Player.Movement
 
         private void DoAccelerate()
         {
-            Debug.Log($"server: {OwnerClientId} is accelerating");
             if (wheel.motorized)
             {
                 wheel.WheelCollider.motorTorque = moveInput.y * wheel.carControl.currentMotorTorque;
@@ -129,11 +129,18 @@ namespace Player.Movement
             wheel.WheelCollider.suspensionSpring = spring;
         }
 
-        #region InputActions
+        [ClientRpc]
+        internal void AssignOwnerClientRpc(ulong client)
+        {
+            owner = client;
+            Debug.Log("owner:" + owner + "id rueda: " + GetInstanceID());
+        }
 
+        #region InputActions
         private void OnMove(InputAction.CallbackContext context)
         {
-            if (!IsOwner) return;
+            if (owner != NetworkManager.Singleton.LocalClientId) return;
+            Debug.Log("owner:" + owner + "id rueda: " + GetInstanceID() + "Client:" + NetworkManager.Singleton.LocalClientId);
 
             var input = context.ReadValue<Vector2>();
 
@@ -142,17 +149,18 @@ namespace Player.Movement
 
         private void OnJumpPressed(InputAction.CallbackContext context)
         {
-            if (!IsOwner) return;
+            if (owner != NetworkManager.Singleton.LocalClientId) return;
 
             JumpPressedServerRpc();
         }
 
         private void OnJumpReleased(InputAction.CallbackContext context)
         {
-            if (!IsOwner) return;
+            if (owner != NetworkManager.Singleton.LocalClientId) return;
 
             JumpReleasedServerRpc();
         }
+
         #endregion
 
         #region ServerRPC

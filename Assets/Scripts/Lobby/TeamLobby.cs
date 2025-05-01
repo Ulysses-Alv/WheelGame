@@ -11,7 +11,6 @@ public class TeamLobby : MonoBehaviour, IDropHandler
 
     public void AddPlayer(PlayerClient net_player)
     {
-        Debug.Log($"ADDED PLAYER {net_player.name} TO THIS TEAM {gameObject.name}");
         clients.Add(net_player);
     }
 
@@ -27,7 +26,6 @@ public class TeamLobby : MonoBehaviour, IDropHandler
     {
         if (clients.Contains(playerClient))
         {
-            Debug.Log($"REMOVED PLAYER {playerClient.name} FROM THIS TEAM {gameObject.name}");
             clients.Remove(playerClient);
         }
     }

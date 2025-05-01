@@ -68,6 +68,7 @@ public class LobbyManager : MonoBehaviour
     {
         SteamAPICall_t m_lobby = SteamMatchmaking.CreateLobby(ELobbyType.k_ELobbyTypeFriendsOnly, MaxLobbyMembers);
         m_mainLobbyCreated.Set(m_lobby);
+        GameStatusManager.SetCurrentStatus(GameStatus.ON_LOBBY);
     }
 
     private void OnMainLobbyCreated(LobbyCreated_t result, bool bIOFailure)
@@ -78,13 +79,13 @@ public class LobbyManager : MonoBehaviour
             return;
         }
 
-        Debug.Log("Host Started");
+        // Debug.Log("Host Started");
 
         NetworkManager.Singleton.StartHost();
 
         SetLobbyID((CSteamID)result.m_ulSteamIDLobby);
 
-        Debug.Log("Lobby created successfully!");
+        // Debug.Log("Lobby created successfully!");
     }
 
     private void OnOverlayTriesToJoin(GameLobbyJoinRequested_t result)
@@ -152,7 +153,7 @@ public class LobbyManager : MonoBehaviour
                 PlayersManager.AddSteamID(steamID);
                 PlayersManager.AddName(playerName);
 
-                Debug.Log("LOBBY UPDATE");
+                //   Debug.Log("LOBBY UPDATE");
 
                 lobbyManagerUI.SetPlayersLobbyInfo(LobbyID);
                 break;
@@ -161,16 +162,14 @@ public class LobbyManager : MonoBehaviour
                 Debug.Log("");
                 PlayersManager.RemoverPlayerWithSteamID(steamID);
                 break;
-        }
-
-
+        };
     }
 
     private void AddClientId(ulong clientId)
     {
         if (!IsLobbyOwner())
         {
-            Debug.Log("NOT OWNER" + "ADDCLIENT");
+            //   Debug.Log("NOT OWNER" + "ADDCLIENT");
 
             return;
         }
