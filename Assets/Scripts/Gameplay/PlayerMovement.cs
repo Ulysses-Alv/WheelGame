@@ -45,7 +45,7 @@ namespace Player.Movement
 
         private void FixedUpdate()
         {
-            if (!IsServer) return;
+            if (!IsServer || !GameStatusManager.canVehiclesMove) return;
 
             if (IsAcelerating())
             {
@@ -59,7 +59,6 @@ namespace Player.Movement
 
         private bool IsAcelerating()
         {
-
             return moveInput.y != 0 && Mathf.Sign(moveInput.y).Equals(Mathf.Sign(wheel.carControl.forwardSpeed));
         }
 
@@ -140,7 +139,7 @@ namespace Player.Movement
         private void OnMove(InputAction.CallbackContext context)
         {
             if (owner != NetworkManager.Singleton.LocalClientId) return;
-            Debug.Log("owner:" + owner + "id rueda: " + GetInstanceID() + "Client:" + NetworkManager.Singleton.LocalClientId);
+            //   Debug.Log("owner:" + owner + "id rueda: " + GetInstanceID() + "Client:" + NetworkManager.Singleton.LocalClientId);
 
             var input = context.ReadValue<Vector2>();
 

@@ -31,7 +31,8 @@ public class CarControl : NetworkBehaviour
     [SerializeField] private PlayerMovement[] wheels;
 
     private NetworkVariable<int> assignedWheelIndex = new();
-
+    private CarTeam carTeam;
+    public CarTeam _carTeam => carTeam;
 
     public override void OnNetworkSpawn()
     {
@@ -48,10 +49,11 @@ public class CarControl : NetworkBehaviour
         currentSteerRange = Mathf.Lerp(steeringRange, steeringRangeAtMaxSpeed, speedFactor);
     }
 
-    internal void AssignOwnerShip(List<PlayerClient> team)
+    internal void AssignOwnerShip(List<PlayerClient> team, CarTeam carTeam)
     {
         if (!IsServer) return;
 
+        this.carTeam = carTeam;
         Queue<PlayerClient> queue = new(team);
         PlayerClient previous = null;
 
@@ -86,4 +88,8 @@ public struct WheelsIDs
         B_LeftId = int.Parse(instanceString + 3.ToString());
         B_RightId = int.Parse(instanceString + 4.ToString());
     }
+}
+public enum CarTeam
+{
+    TeamA, TeamB, TeamC
 }

@@ -1,4 +1,5 @@
-﻿using Unity.Netcode;
+﻿using System;
+using Unity.Netcode;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -78,11 +79,19 @@ public class GameManager : NetworkBehaviour
     {
 
     }
+
+    internal void WinGame(CarTeam winnerTeam)
+    {
+        throw new NotImplementedException();
+    }
 }
 
 public static class GameStatusManager
 {
     private static GameStatus CurrentStatus;
+    private static bool _canVehiclesMove = false;
+
+    public static bool canVehiclesMove => _canVehiclesMove;
 
     public static GameStatus GetCurrentStatus()
     {
@@ -95,6 +104,14 @@ public static class GameStatusManager
         if (!NetworkManager.Singleton.IsServer) return;
 
         CurrentStatus = status;
+    }
+    public static void ChangeStatus(bool newStatus)
+    {
+        _canVehiclesMove = newStatus;
+    }
+    public static void ChangeStatus()
+    {
+        _canVehiclesMove = !_canVehiclesMove;
     }
 
     public static void StartGame()
