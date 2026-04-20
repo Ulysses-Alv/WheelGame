@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using Unity.Netcode;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using Shared;
 
 public class GameManager : NetworkBehaviour
 {
@@ -84,48 +85,4 @@ public class GameManager : NetworkBehaviour
     {
         throw new NotImplementedException();
     }
-}
-
-public static class GameStatusManager
-{
-    private static GameStatus CurrentStatus;
-    private static bool _canVehiclesMove = false;
-
-    public static bool canVehiclesMove => _canVehiclesMove;
-
-    public static GameStatus GetCurrentStatus()
-    {
-        if (!NetworkManager.Singleton.IsServer) return GameStatus.NOT_SERVER;
-
-        return CurrentStatus;
-    }
-    public static void SetCurrentStatus(GameStatus status)
-    {
-        if (!NetworkManager.Singleton.IsServer) return;
-
-        CurrentStatus = status;
-    }
-    public static void ChangeStatus(bool newStatus)
-    {
-        _canVehiclesMove = newStatus;
-    }
-    public static void ChangeStatus()
-    {
-        _canVehiclesMove = !_canVehiclesMove;
-    }
-
-    public static void StartGame()
-    {
-        SetCurrentStatus(GameStatus.STARTING);
-    }
-}
-
-public enum GameStatus
-{
-    NOT_SERVER = -1, //-1
-    ON_LOBBY,    //0
-    STARTING,   //1
-    PLAYING,    //2
-    PAUSED,     //3
-    ENDED       //4
 }

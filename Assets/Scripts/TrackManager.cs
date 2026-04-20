@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.Events;
+using Shared;
 
 public class TrackManager : MonoBehaviour
 {
@@ -14,19 +15,5 @@ public class TrackManager : MonoBehaviour
     {
         var winnerTeam = car.gameObject.GetComponentInParent<CarControl>()._carTeam;
         GameManager.instance.WinGame(winnerTeam);
-    }
-}
-
-public class CheckPoint : MonoBehaviour
-{
-    UnityEvent<Collider> onTriggerEnter;
-
-    private void OnTriggerEnter(Collider other)
-    {
-        onTriggerEnter.Invoke(other);
-    }
-    public void onTriggerEnterAddListener(UnityAction<Collider> callback)
-    {
-        onTriggerEnter.AddListener(callback);
     }
 }

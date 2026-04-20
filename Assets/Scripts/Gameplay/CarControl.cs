@@ -2,6 +2,7 @@ using Player.Movement;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using Shared;
 
 public class CarControl : NetworkBehaviour
 {
@@ -38,12 +39,12 @@ public class CarControl : NetworkBehaviour
     {
         rigidBody.centerOfMass += Vector3.up * centreOfGravityOffset;
 
-        wheelsIDs = new(GetInstanceID());
+        wheelsIDs = new WheelsIDs(GetInstanceID());
     }
 
     void Update()
     {
-        forwardSpeed = Vector3.Dot(transform.forward, rigidBody.velocity);
+        forwardSpeed = Vector3.Dot(transform.forward, rigidBody.linearVelocity);
         speedFactor = Mathf.InverseLerp(0, maxSpeed, forwardSpeed);
         currentMotorTorque = Mathf.Lerp(motorTorque, 0, speedFactor);
         currentSteerRange = Mathf.Lerp(steeringRange, steeringRangeAtMaxSpeed, speedFactor);
@@ -54,7 +55,7 @@ public class CarControl : NetworkBehaviour
         if (!IsServer) return;
 
         this.carTeam = carTeam;
-        Queue<PlayerClient> queue = new(team);
+        Queue<PlayerClient> queue = new Queue<PlayerClient>(team);
         PlayerClient previous = null;
 
         foreach (var wheel in wheels)
@@ -70,26 +71,4 @@ public class CarControl : NetworkBehaviour
             }
         }
     }
-}
-
-public struct WheelsIDs
-{
-    int F_LeftId;
-    int F_RightId;
-    int B_LeftId;
-    int B_RightId;
-
-    public WheelsIDs(int instanceID)
-    {
-        var instanceString = instanceID.ToString();
-
-        F_LeftId = int.Parse(instanceString + 1.ToString());
-        F_RightId = int.Parse(instanceString + 2.ToString());
-        B_LeftId = int.Parse(instanceString + 3.ToString());
-        B_RightId = int.Parse(instanceString + 4.ToString());
-    }
-}
-public enum CarTeam
-{
-    TeamA, TeamB, TeamC
 }

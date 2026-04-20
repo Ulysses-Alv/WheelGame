@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using Shared;
 
 namespace Player.Movement
 {
@@ -187,24 +188,5 @@ namespace Player.Movement
             StartCoroutine(ReleaseSpring());
         }
         #endregion
-    }
-}
-
-public static class DictionaryOfWaitForSeconds
-{
-    private static readonly Dictionary<float, WaitForSeconds> dictOfWaitForSeconds = new();
-
-    public static WaitForSeconds GetWaitForSeconds(float time)
-    {
-        if (dictOfWaitForSeconds.TryGetValue(time, out WaitForSeconds result))
-        {
-            return result;
-        }
-        else
-        {
-            WaitForSeconds wait = new(time);
-            dictOfWaitForSeconds.Add(time, wait);
-            return wait;
-        }
     }
 }

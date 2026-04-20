@@ -3,6 +3,7 @@ using Steamworks;
 using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using Shared;
 
 public class LobbyManager : MonoBehaviour
 {
@@ -189,12 +190,4 @@ public class LobbyManager : MonoBehaviour
             TeamLobbyManager.instance.ShufflePlayers();
         }
     }
-}
-
-public class GameConfigurationManager : MonoBehaviour
-{
-    public static GameConfigurationManager instance;
-
-    public bool IsRandomTeam { get; private set; }
-
 }

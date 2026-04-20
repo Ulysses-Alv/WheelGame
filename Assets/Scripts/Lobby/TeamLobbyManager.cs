@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using Shared;
 
 public class TeamLobbyManager : MonoBehaviour
 {
@@ -82,27 +83,8 @@ public class TeamLobbyManager : MonoBehaviour
         var firstTeam = FirstTeamLobby.GetPlayerClients();
         var secondTeam = SecondTeamLobby.GetPlayerClients();
 
-        InGamePlayers result = new(firstTeam, secondTeam);
+        InGamePlayers result = new InGamePlayers(firstTeam, secondTeam);
 
         return result;
-    }
-}
-
-public struct InGamePlayers
-{
-    public List<PlayerClient> teamA;
-    public List<PlayerClient> teamB;
-    public List<PlayerClient> spects;
-
-    public InGamePlayers(List<PlayerClient> teamA, List<PlayerClient> teamB)
-    {
-        this.teamA = teamA;
-        this.teamB = teamB;
-        spects = new List<PlayerClient>();
-    }
-
-    public InGamePlayers(List<PlayerClient> teamA, List<PlayerClient> teamB, List<PlayerClient> spects) : this(teamA, teamB)
-    {
-        this.spects = spects;
     }
 }
