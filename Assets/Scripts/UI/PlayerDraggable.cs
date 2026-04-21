@@ -1,6 +1,7 @@
 using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using Shared;
 
 public class PlayerDraggable : MonoBehaviour, IDragHandler, IBeginDragHandler, IEndDragHandler
 {

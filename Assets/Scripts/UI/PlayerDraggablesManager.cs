@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using Unity.Netcode;
 using UnityEngine;
+using Shared;
 
 public class PlayerDraggablesManager : MonoBehaviour
 {
