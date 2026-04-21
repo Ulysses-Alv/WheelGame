@@ -10,6 +10,10 @@ public class GameManager : NetworkBehaviour
     private string m_SceneName;
     public static GameManager instance;
 
+    private NetworkVariable<CarTeam> winningTeam = new();
+
+    public static event Action<CarTeam> OnGameEnded;
+
 #if UNITY_EDITOR
     [SerializeField] SceneAsset gameScene;
 
@@ -40,13 +44,13 @@ public class GameManager : NetworkBehaviour
         }
     }
 
-
     public void StartGame()
     {
         if (!NetworkManager.Singleton.IsServer ||
              !GameStatusManager.GetCurrentStatus().Equals(GameStatus.ON_LOBBY)) return;
 
-        GameStatusManager.StartGame();
+        GameStatusManager.SetCurrentStatus(GameStatus.STARTING);
+        GameStatusManager.ChangeStatus(true);
 
         InGamePlayers inGamePlayers = TeamLobbyManager.instance.GetIngamePlayers();
 
@@ -69,20 +73,48 @@ public class GameManager : NetworkBehaviour
 
         NetworkManager.Singleton.SceneManager.OnLoadComplete -= OnSceneLoaded;
 
+        // Transition from STARTING to PLAYING once scene is loaded
+        GameStatusManager.SetCurrentStatus(GameStatus.PLAYING);
+
         InGamePlayers inGamePlayers = TeamLobbyManager.instance.GetIngamePlayers();
         SpawnCarManager.instance.SpawnCars(inGamePlayers);
     }
+
     public void PauseGame()
     {
-
+        if (!NetworkManager.Singleton.IsServer) return;
+        GameStatusManager.SetCurrentStatus(GameStatus.PAUSED);
+        GameStatusManager.ChangeStatus(false);
     }
+
     public void EndGame()
     {
-
+        if (!NetworkManager.Singleton.IsServer) return;
+        GameStatusManager.SetCurrentStatus(GameStatus.ENDED);
+        GameStatusManager.ChangeStatus(false);
     }
 
     internal void WinGame(CarTeam winnerTeam)
     {
-        throw new NotImplementedException();
+        if (!NetworkManager.Singleton.IsServer) return;
+        if (GameStatusManager.GetCurrentStatus() != GameStatus.PLAYING) return;
+
+        EndGame();
+
+        winningTeam.Value = winnerTeam;
+        OnGameEnded?.Invoke(winnerTeam);
+
+        BroadcastWinnerClientRpc(winnerTeam);
+    }
+
+    [ClientRpc]
+    private void BroadcastWinnerClientRpc(CarTeam winnerTeam)
+    {
+        if (NetworkManager.Singleton.IsServer) return;
+
+        winningTeam.Value = winnerTeam;
+        OnGameEnded?.Invoke(winnerTeam);
+
+        Debug.Log($"[Client] Game Over! Winner: {winnerTeam}");
     }
 }

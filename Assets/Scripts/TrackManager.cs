@@ -4,10 +4,16 @@ using Shared;
 
 public class TrackManager : MonoBehaviour
 {
-    [SerializeField] CheckPoint LineaDeLlegada;
+    [SerializeField] private CheckPoint _lineaDeLlegada;
+    public CheckPoint LineaDeLlegada => _lineaDeLlegada;
 
     void Start()
     {
+        if (LineaDeLlegada == null)
+        {
+            Debug.LogWarning("[TrackManager] No CheckPoint assigned. Use TrackBootstrap or assign manually.");
+            return;
+        }
         LineaDeLlegada.onTriggerEnterAddListener(WinGame);
     }
 
